@@ -1,0 +1,44 @@
+{# templates/home/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des projets - TaskLinker{% endblock %}
+
+{% block body %}
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <h1>Projets</h1>
+        </div>
+    </header>
+    <div id="content">
+        <div id="projects-container">
+            {# Plus tard, on fera une boucle sur les projets venus du contrôleur #}
+            <article class="card-project">
+                <a href="#"> {# Lien vers la page projet #}
+                    <h2>TaskLinker</h2>
+                </a>
+                <div class="card-project-icons">
+                    <a href="#"><i class="fa-solid fa-pen"></i></a>
+                    <a href="#"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </article>
+
+            <article class="card-project">
+                <a href="#">
+                    <h2>Site vitrine Les Soeurs Marchand</h2>
+                </a>
+                <div class="card-project-icons">
+                    <a href="#"><i class="fa-solid fa-pen"></i></a>
+                    <a href="#"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </article>
+
+            <article class="card-project">
+                <a href="#"> {# Lien vers la page d'ajout #}
+                    <i class="fa-solid fa-circle-plus add-project-icon"></i>
+                    <h2>Ajouter un projet</h2>
+                </a>
+            </article>
+        </div>
+    </div>
+{% endblock %}
