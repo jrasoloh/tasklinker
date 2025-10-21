@@ -34,8 +34,7 @@
                             {{ include('task/_card.html.twig', { task: task }) }}
                         {% endfor %}
 
-                        {# On mettra le vrai lien d'ajout plus tard #}
-                        <a href="#" class="task-add">
+                        <a href="{{ path('task_create', {id: project.id, status: statusTitle}) }}" class="task-add">
                             + Ajouter une tâche
                         </a>
                     </div>
