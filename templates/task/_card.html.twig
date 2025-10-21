@@ -1,0 +1,28 @@
+{# templates/task/_card.html.twig #}
+{# Ce fichier reçoit une variable 'task' #}
+
+{# On mettra le vrai lien vers la tâche plus tard #}
+<a class="task" href="#">
+    <h3>{{ task.title }}</h3>
+
+    {% if task.description %}
+        <p>{{ task.description }}</p>
+    {% endif %}
+
+    <div class="task-infos">
+        {# On affiche la deadline seulement si elle existe #}
+        {% if task.deadline %}
+            <div class="task-deadline">
+                <i class="fa-regular fa-calendar"></i>
+                {{ task.deadline|date('d/m/Y') }}
+            </div>
+        {% endif %}
+
+        {# On affiche l'assigné seulement s'il existe #}
+        {% if task.assignedUser %}
+            <div class="mini-user" title="Assigné à {{ task.assignedUser.firstName }}">
+                {{ task.assignedUser.firstName|first }}{{ task.assignedUser.lastName|first }}
+            </div>
+        {% endif %}
+    </div>
+</a>

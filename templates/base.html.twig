@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {# Le titre sera défini dans chaque page enfant #}
+
     <title>{% block title %}TaskLinker{% endblock %}</title>
 
     {# Liens CSS et JS - On utilisera Symfony Asset pour gérer ça proprement plus tard #}
@@ -19,7 +19,6 @@
 <div id="main-container">
     <nav>
         <a href="{{ path('app_home') }}" id="logo">
-            {# Pense à mettre le logo dans le dossier /public/img/ #}
             <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
         </a>
         <ul id="main-menu">
@@ -38,7 +37,6 @@
         </ul>
     </nav>
     <main>
-        {# Ce bloc contiendra tout le contenu spécifique à la page #}
         {% block body %}{% endblock %}
     </main>
 </div>
