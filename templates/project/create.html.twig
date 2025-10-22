@@ -14,20 +14,16 @@
     </header>
 
     <div id="content">
-        <div class="d-flex justify-content-center">
+        {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
 
-            {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
+        {{ form_row(form.name) }}
 
-            {{ form_row(form.name) }}
+        {{ form_row(form.users, {
+            'attr': {'class': 'select2'}
+        }) }}
 
-            {{ form_row(form.users, {
-                'attr': {'class': 'select2'}
-            }) }}
+        <button type="submit" class="button button-submit">Continuer</button>
 
-            <button type="submit" class="button button-submit">Continuer</button>
-
-            {{ form_end(form) }}
-
-        </div>
+        {{ form_end(form) }}
     </div>
 {% endblock %}

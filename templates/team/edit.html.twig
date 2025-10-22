@@ -14,23 +14,19 @@
     </header>
 
     <div id="content">
-        <div class="d-flex justify-content-center">
+        {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
 
-            {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
+        {{ form_row(form.lastName) }}
+        {{ form_row(form.firstName) }}
+        {{ form_row(form.email) }}
 
-            {{ form_row(form.lastName) }}
-            {{ form_row(form.firstName) }}
-            {{ form_row(form.email) }}
-
-            <div class="form-flex">
-                <div>{{ form_row(form.startDate) }}</div>
-                <div>{{ form_row(form.status) }}</div>
-            </div>
-
-            <button type="submit" class="button button-submit">Enregistrer</button>
-
-            {{ form_end(form) }}
-
+        <div class="form-flex">
+            <div>{{ form_row(form.startDate) }}</div>
+            <div>{{ form_row(form.status) }}</div>
         </div>
+
+        <button type="submit" class="button button-submit">Enregistrer</button>
+
+        {{ form_end(form) }}
     </div>
 {% endblock %}
