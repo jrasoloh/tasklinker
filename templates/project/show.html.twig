@@ -17,7 +17,7 @@
                     {% endfor %}
                 </div>
                 {# On mettra le vrai lien d'édition plus tard #}
-                <a class="button" href="#">Modifier</a>
+                <a class="button" href="{{ path('project_edit', {id: project.id}) }}">Modifier</a>
             </div>
         </div>
     </header>

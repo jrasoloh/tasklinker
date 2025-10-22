@@ -15,25 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ProjectController extends AbstractController
 {
-    #[Route('/project/{id}', name: 'project_show')]
-    public function show(Project $project): Response
-    {
-        $tasksByStatus = [
-            'To Do' => [],
-            'Doing' => [],
-            'Done' => [],
-        ];
-
-        foreach ($project->getTasks() as $task) {
-            $tasksByStatus[$task->getStatus()][] = $task;
-        }
-
-        return $this->render('project/show.html.twig', [
-            'project' => $project,
-            'tasksByStatus' => $tasksByStatus,
-        ]);
-    }
-
     #[Route('/project/new', name: 'project_create')]
     public function projectCreate(Request $request, EntityManagerInterface $em): Response
     {
@@ -54,6 +35,25 @@ final class ProjectController extends AbstractController
 
         return $this->render('project/create.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/project/{id}', name: 'project_show')]
+    public function show(Project $project): Response
+    {
+        $tasksByStatus = [
+            'To Do' => [],
+            'Doing' => [],
+            'Done' => [],
+        ];
+
+        foreach ($project->getTasks() as $task) {
+            $tasksByStatus[$task->getStatus()][] = $task;
+        }
+
+        return $this->render('project/show.html.twig', [
+            'project' => $project,
+            'tasksByStatus' => $tasksByStatus,
         ]);
     }
 

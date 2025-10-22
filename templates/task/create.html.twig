@@ -10,13 +10,6 @@
             <div class="flex-header">
                 {# On met le titre de la tâche, ou "Nouvelle tâche" si elle n'existe pas encore #}
                 <h1>Créer une tâche</h1>
-                <div class="user-list">
-                    {% for user in project.users %}
-                        <div class="avatar" title="{{ user.firstName }} {{ user.lastName }}">
-                            {{ user.firstName|first }}{{ user.lastName|first }}
-                        </div>
-                    {% endfor %}
-                </div>
             </div>
         </div>
     </header>

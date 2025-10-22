@@ -416,7 +416,8 @@ form input, form select, form textarea {
     border-radius: 4px;
 }
 
-form.form-main {
+form.form-main,
+form.delete-form {
     width: 320px;
 }
 
