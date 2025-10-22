@@ -1,0 +1,33 @@
+{# templates/project/create.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau projet{% endblock %}
+
+{% block body %}
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <div class="flex-header">
+                <h1>Nouveau projet</h1>
+            </div>
+        </div>
+    </header>
+
+    <div id="content">
+        <div class="d-flex justify-content-center">
+
+            {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
+
+            {{ form_row(form.name) }}
+
+            {{ form_row(form.users, {
+                'attr': {'class': 'select2'}
+            }) }}
+
+            <button type="submit" class="button button-submit">Continuer</button>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+{% endblock %}

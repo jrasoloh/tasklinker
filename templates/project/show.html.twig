@@ -1,0 +1,46 @@
+{# templates/project/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ project.name }} - TaskLinker{% endblock %}
+
+{% block body %}
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <div class="flex-header">
+                <h1>{{ project.name }}</h1>
+                <div class="user-list">
+                    {% for user in project.users %}
+                        <div class="avatar" title="{{ user.firstName }} {{ user.lastName }}">
+                            {{ user.firstName|first }}{{ user.lastName|first }}
+                        </div>
+                    {% endfor %}
+                </div>
+                {# On mettra le vrai lien d'édition plus tard #}
+                <a class="button" href="#">Modifier</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="content">
+        <div id="tasks-container">
+
+            {% for statusTitle, tasks in tasksByStatus %}
+                <div class="task-column">
+                    <h2>{{ statusTitle }}</h2>
+                    <div class="tasks-list">
+
+                        {% for task in tasks %}
+                            {{ include('task/_card.html.twig', { task: task, project: project }) }}
+                        {% endfor %}
+
+                        <a href="{{ path('task_create', {id: project.id, status: statusTitle}) }}" class="task-add">
+                            + Ajouter une tâche
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

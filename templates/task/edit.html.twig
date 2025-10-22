@@ -1,0 +1,49 @@
+{# templates/task/edit.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier : {{ task.title }}{% endblock %}
+
+{% block body %}
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <div class="flex-header">
+                <h1>{{ task.title }}</h1>
+            </div>
+        </div>
+    </header>
+
+    <div id="content">
+        <div class="d-flex justify-content-center">
+
+            <div>
+                {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
+
+                {{ form_row(form.title) }}
+                {{ form_row(form.description) }}
+
+                {{ form_row(form.deadline) }}
+                {{ form_row(form.status) }}
+
+                {{ form_row(form.assignedUser) }}
+
+                <button type="submit" class="button button-submit">Modifier</button>
+
+                {{ form_end(form) }}
+
+                <form method="post" action="{{ path('task_delete', {id: project.id, task_id: task.id}) }}"
+                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');"
+                      class="delete-form mt-3">
+
+                    {# Le jeton CSRF de protection #}
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+
+                    <button type="submit" class="delete-task" style="border:none; background:none; cursor:pointer;">
+                        Supprimer la tâche
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
