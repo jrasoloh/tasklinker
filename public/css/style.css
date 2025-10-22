@@ -455,13 +455,20 @@ form ul {
     font-style: italic;
 }
 
-a.delete-task {
+form.delete-form {
+    text-align: center;
+}
+
+.delete-task {
     color: #E14343;
     font-size: 14px;
     font-weight: 600;
-    text-align: center;
-    display: block;
     margin-top: 20px;
+    text-decoration: underline;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
 }
 
 form .select2-container--default .select2-selection--multiple .select2-selection__choice {
@@ -492,12 +499,12 @@ form .select2-container--default .select2-selection--multiple .select2-selection
         width: 150px;
         padding: 50px 10px;
     }
-    
+
     #logo img {
         width: 100px;
         margin-bottom: 35px;
     }
-    
+
     ul#main-menu li a {
         padding: 10px;
         gap: 20px;
@@ -512,18 +519,18 @@ form .select2-container--default .select2-selection--multiple .select2-selection
     div#content {
         padding: 30px;
     }
-    
+
     nav {
         width: 50px;
         padding-left: 0;
         padding-right: 0;
         padding-top: 20px;
     }
-    
+
     #logo {
         display: none;
     }
-    
+
     ul#main-menu li a {
         border-radius: 0;
         padding: 13px;

@@ -91,4 +91,29 @@ final class ProjectController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/project/{id}/task/{task_id}/delete', name: 'task_delete', methods: ['POST'])]
+    public function taskDelete(
+        Project $project,
+        #[MapEntity(id: 'task_id')] Task $task,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+
+        // On vérifie que la tâche appartient bien au projet
+        if ($task->getProject() !== $project) {
+            throw $this->createNotFoundException('Tâche non trouvée dans ce projet');
+        }
+
+        // On vérifie la validité du jeton CSRF
+        // Le nom 'delete' . task.id doit être le même que dans le formulaire
+        $token = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete'.$task->getId(), $token)) {
+            $em->remove($task);
+            $em->flush();
+        }
+
+        // On redirige vers la page du projet
+        return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+    }
 }
