@@ -15,27 +15,22 @@
     </header>
 
     <div id="content">
-        {# On centre le formulaire qui a une largeur fixe dans style.css #}
-        <div class="d-flex justify-content-center">
+        {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
 
-            {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
+        {# On rend chaque champ manuellement pour qu'il corresponde au style #}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
 
-            {# On rend chaque champ manuellement pour qu'il corresponde au style #}
-            {{ form_row(form.title) }}
-            {{ form_row(form.description) }}
-
-            {# On utilise la classe 'form-flex' du style.css #}
-            <div class="form-flex">
-                <div>{{ form_row(form.deadline) }}</div>
-                <div>{{ form_row(form.status) }}</div>
-            </div>
-
-            {{ form_row(form.assignedUser) }}
-
-            <button type="submit" class="button button-submit">Ajouter</button>
-
-            {{ form_end(form) }}
-
+        {# On utilise la classe 'form-flex' du style.css #}
+        <div class="form-flex">
+            <div>{{ form_row(form.deadline) }}</div>
+            <div>{{ form_row(form.status) }}</div>
         </div>
+
+        {{ form_row(form.assignedUser) }}
+
+        <button type="submit" class="button button-submit">Ajouter</button>
+
+        {{ form_end(form) }}
     </div>
 {% endblock %}
