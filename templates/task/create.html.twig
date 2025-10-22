@@ -25,7 +25,7 @@
         {# On centre le formulaire qui a une largeur fixe dans style.css #}
         <div class="d-flex justify-content-center">
 
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'class': 'form-main'}}) }}
 
             {# On rend chaque champ manuellement pour qu'il corresponde au style #}
             {{ form_row(form.title) }}

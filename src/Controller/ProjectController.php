@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Entity\Task;
+use App\Form\ProjectType;
 use App\Form\TaskType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -31,6 +32,65 @@ final class ProjectController extends AbstractController
             'project' => $project,
             'tasksByStatus' => $tasksByStatus,
         ]);
+    }
+
+    #[Route('/project/new', name: 'project_create')]
+    public function projectCreate(Request $request, EntityManagerInterface $em): Response
+    {
+        $project = new Project();
+        $project->setIsArchived(false);
+
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($project);
+            $em->flush();
+
+            $this->addFlash('success', 'Projet créé avec succès !');
+
+            return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+        }
+
+        return $this->render('project/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/project/{id}/edit', name: 'project_edit')]
+    public function projectEdit(Project $project, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'Projet mis à jour avec succès !');
+
+            return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+        }
+
+        return $this->render('project/edit.html.twig', [
+            'project' => $project,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/project/{id}/archive', name: 'project_archive', methods: ['POST'])]
+    public function projectArchive(Project $project, Request $request, EntityManagerInterface $em): Response
+    {
+        $token = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('archive'.$project->getId(), $token)) {
+
+            $project->setIsArchived(true);
+            $em->flush();
+
+            $this->addFlash('success', 'Projet archivé avec succès.');
+        }
+
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/project/{id}/task/new', name: 'task_create')]

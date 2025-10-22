@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
           integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     {% block stylesheets %}{% endblock %}
 </head>
@@ -26,7 +27,6 @@
         {% set currentRoute = app.request.attributes.get('_route') %}
 
         <ul id="main-menu">
-            {# On gèrera la classe "active" dynamiquement plus tard #}
             <li class="{{ (currentRoute == 'app_home' or currentRoute starts with 'project_' or currentRoute starts with 'task_') ? 'active' : '' }}">
                 <a href="{{ path('app_home') }}">
                     <i class="fa-solid fa-list-check"></i> Projets
