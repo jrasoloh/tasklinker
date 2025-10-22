@@ -21,14 +21,18 @@
         <a href="{{ path('app_home') }}" id="logo">
             <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
         </a>
+
+        {# On récupère le nom de la route actuelle (ex: 'app_home', 'project_show', 'team_index') #}
+        {% set currentRoute = app.request.attributes.get('_route') %}
+
         <ul id="main-menu">
             {# On gèrera la classe "active" dynamiquement plus tard #}
-            <li class="active">
+            <li class="{{ (currentRoute == 'app_home' or currentRoute starts with 'project_' or currentRoute starts with 'task_') ? 'active' : '' }}">
                 <a href="{{ path('app_home') }}">
                     <i class="fa-solid fa-list-check"></i> Projets
                 </a>
             </li>
-            <li>
+            <li class="{{ (currentRoute starts with 'team_') ? 'active' : '' }}">
                 <a href="{{ path('team_index') }}">
                     <i class="fa-regular fa-user"></i> Équipe
                 </a>
