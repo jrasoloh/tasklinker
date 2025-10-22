@@ -1,0 +1,46 @@
+{# templates/task/edit.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier : {{ task.title }}{% endblock %}
+
+{% block body %}
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <div class="flex-header">
+                <h1>{{ task.title }}</h1>
+                <div class="user-list">
+                    {% for user in project.users %}
+                        <div class="avatar" title="{{ user.firstName }} {{ user.lastName }}">
+                            {{ user.firstName|first }}{{ user.lastName|first }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="content">
+        <div class="d-flex justify-content-center">
+
+            {{ form_start(form) }}
+
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+
+            <div class="form-flex">
+                <div>{{ form_row(form.deadline) }}</div>
+                <div>{{ form_row(form.status) }}</div>
+            </div>
+
+            {{ form_row(form.assignedUser) }}
+
+            <button type="submit" class="button button-submit">Modifier</button>
+
+            {{ form_end(form) }}
+
+            {# On ajoute le lien de suppression #}
+            <a href="#" class="delete-task">Supprimer la tâche</a>
+        </div>
+    </div>
+{% endblock %}

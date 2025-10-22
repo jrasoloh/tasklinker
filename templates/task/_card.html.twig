@@ -2,7 +2,7 @@
 {# Ce fichier reçoit une variable 'task' #}
 
 {# On mettra le vrai lien vers la tâche plus tard #}
-<a class="task" href="#">
+<a class="task" href="{{ path('task_edit', {id: project.id, task_id: task.id}) }}">
     <h3>{{ task.title }}</h3>
 
     {% if task.description %}

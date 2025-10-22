@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Entity\Task;
 use App\Form\TaskType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,14 +37,11 @@ final class ProjectController extends AbstractController
     public function taskCreate(Project $project, Request $request, EntityManagerInterface $em): Response
     {
         $task = new Task();
-        // On associe la tâche au bon projet
         $task->setProject($project);
 
-        // On récupère le statut depuis l'URL (ex: ?status=Doing)
-        $status = $request->query->get('status', 'To Do'); // 'To Do' par défaut
+        $status = $request->query->get('status', 'To Do');
         $task->setStatus($status);
 
-        // On passe l'option 'project' au formulaire
         $form = $this->createForm(TaskType::class, $task, [
             'project' => $project
         ]);
@@ -54,12 +52,42 @@ final class ProjectController extends AbstractController
             $em->persist($task);
             $em->flush();
 
-            // On redirige vers la page du projet
             return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
         }
 
         return $this->render('task/create.html.twig', [
             'project' => $project,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/project/{id}/task/{task_id}/edit', name: 'task_edit')]
+    public function taskEdit(
+        Project $project,
+        #[MapEntity(id: 'task_id')] Task $task,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+
+        if ($task->getProject() !== $project) {
+            throw $this->createNotFoundException('Tâche non trouvée dans ce projet');
+        }
+
+        $form = $this->createForm(TaskType::class, $task, [
+            'project' => $project
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            return $this->redirectToRoute('project_show', ['id' => $project->getId()]); // [cite: 160]
+        }
+
+        return $this->render('task/edit.html.twig', [
+            'project' => $project,
+            'task' => $task,
             'form' => $form->createView(),
         ]);
     }

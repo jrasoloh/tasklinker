@@ -31,7 +31,7 @@
                     <div class="tasks-list">
 
                         {% for task in tasks %}
-                            {{ include('task/_card.html.twig', { task: task }) }}
+                            {{ include('task/_card.html.twig', { task: task, project: project }) }}
                         {% endfor %}
 
                         <a href="{{ path('task_create', {id: project.id, status: statusTitle}) }}" class="task-add">
