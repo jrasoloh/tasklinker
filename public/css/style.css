@@ -384,10 +384,11 @@ a.button-edit-team {
     justify-content: center;
 }
 
-a.delete-team {
+a.delete-team, .delete-team {
     color: #E14343;
     font-size: 14px;
     font-weight: 600;
+    text-decoration: underline;
 }
 
 table#team-container thead tr th:last-child {

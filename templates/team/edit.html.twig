@@ -1,0 +1,36 @@
+{# templates/team/edit.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier : {{ user.firstName }} {{ user.lastName }}{% endblock %}
+
+{% block body %}
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <div class="flex-header">
+                <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+            </div>
+        </div>
+    </header>
+
+    <div id="content">
+        <div class="d-flex justify-content-center">
+
+            {{ form_start(form) }}
+
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.email) }}
+
+            <div class="form-flex">
+                <div>{{ form_row(form.startDate) }}</div>
+                <div>{{ form_row(form.status) }}</div>
+            </div>
+
+            <button type="submit" class="button button-submit">Enregistrer</button>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+{% endblock %}
