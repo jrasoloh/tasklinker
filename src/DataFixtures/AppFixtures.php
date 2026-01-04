@@ -12,6 +12,14 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        UserFactory::createOne([
+            'email' => 'admin@tasklinker.com',
+            'firstName' => 'Pierre',
+            'lastName' => 'Admin',
+            'roles' => ['ROLE_PROJECT_MANAGER'],
+            'status' => 'CDI'
+        ]);
+
         UserFactory::createMany(8);
 
         ProjectFactory::createMany(3, function() {
