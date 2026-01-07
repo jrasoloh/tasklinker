@@ -47,6 +47,15 @@
             </li>
         </ul>
     </nav>
+
+    {% if app.user %}
+        <div class="user-header-profile">
+            <div class="user-avatar">
+                {{ app.user.firstName|first|upper }}{{ app.user.lastName|first|upper }}
+            </div>
+        </div>
+    {% endif %}
+
     <main>
         {% block body %}{% endblock %}
     </main>

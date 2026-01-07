@@ -15,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 final class TeamController extends AbstractController
 {
     #[Route('/team', name: 'team_index')]
-    public function index(UserRepository $userRepository): Response
+    public function index(EntityManagerInterface $em): Response
     {
-        $users = $userRepository->findAll();
+        $users = User::getAllUsers($em);
 
         return $this->render('team/index.html.twig', [
             'users' => $users,

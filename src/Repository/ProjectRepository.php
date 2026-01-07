@@ -16,6 +16,19 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
+    public function findNonArchivedProjectsByUser(int $userId): array
+    {
+        return $this->createQueryBuilder('project')
+            ->join('project.users', 'user')
+            ->andWhere('project.isArchived = :isArchived')
+            ->andWhere('user.id = :userId')
+            ->setParameter('isArchived', false)
+            ->setParameter('userId', $userId)
+            ->orderBy('project.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Project[] Returns an array of Project objects
 //     */

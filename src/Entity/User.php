@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -174,9 +175,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Project>
      */
-    public function getProjects(): Collection
+    public function getProjects(bool $byIsArchived): Collection
     {
-        return $this->projects;
+        return $this->projects->filter(function(Project $project) use ($byIsArchived) {
+            return $project->isArchived() === $byIsArchived;
+        });
+    }
+
+    public function getNonArchivedProjects(): array
+    {
+        return $this->projects->filter(function (Project $project) {
+            return !$project->isArchived();
+        })->toArray();
     }
 
     public function addProject(Project $project): static
@@ -226,6 +236,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public static function getAllUsers(EntityManagerInterface $em): array
+    {
+        return $em->getRepository(self::class)->findAll();
     }
 
     /**
