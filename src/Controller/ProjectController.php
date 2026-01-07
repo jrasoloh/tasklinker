@@ -43,6 +43,8 @@ final class ProjectController extends AbstractController
     #[Route('/project/{id}', name: 'project_show')]
     public function show(Project $project): Response
     {
+        $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
+
         $tasksByStatus = [
             'To Do' => [],
             'Doing' => [],
@@ -60,9 +62,10 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}/edit', name: 'project_edit')]
-    #[IsGranted('ROLE_PROJECT_MANAGER')]
     public function projectEdit(Project $project, Request $request, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('PROJECT_EDIT', $project);
+
         $form = $this->createForm(ProjectType::class, $project);
 
         $form->handleRequest($request);
@@ -100,6 +103,8 @@ final class ProjectController extends AbstractController
     #[Route('/project/{id}/task/new', name: 'task_create')]
     public function taskCreate(Project $project, Request $request, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
+
         $task = new Task();
         $task->setProject($project);
 
@@ -132,6 +137,7 @@ final class ProjectController extends AbstractController
         Request $request,
         EntityManagerInterface $em
     ): Response {
+        $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
 
         if ($task->getProject() !== $project) {
             throw $this->createNotFoundException('Tâche non trouvée dans ce projet');
@@ -163,6 +169,7 @@ final class ProjectController extends AbstractController
         Request $request,
         EntityManagerInterface $em
     ): Response {
+        $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
 
         // On vérifie que la tâche appartient bien au projet
         if ($task->getProject() !== $project) {

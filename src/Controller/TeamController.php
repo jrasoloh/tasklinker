@@ -11,10 +11,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_PROJECT_MANAGER')]
+#[Route('/team')]
 final class TeamController extends AbstractController
 {
-    #[Route('/team', name: 'team_index')]
+    #[Route('/', name: 'team_index')]
     public function index(EntityManagerInterface $em): Response
     {
         $users = User::getAllUsers($em);

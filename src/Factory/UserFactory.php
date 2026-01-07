@@ -3,7 +3,6 @@
 namespace App\Factory;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Proxy;
@@ -31,7 +30,7 @@ final class UserFactory extends PersistentProxyObjectFactory
         return [
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
-            'email' => self::faker()->unique()->safeEmail(),
+            'email' => self::faker()->unique()->userName() . '@tasklinker.com',
             'status' => self::faker()->randomElement(['CDI', 'CDD', 'Freelance']),
             'startDate' => self::faker()->dateTimeBetween('-5 years'),
 

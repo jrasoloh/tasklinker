@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -27,6 +28,20 @@ class ProjectRepository extends ServiceEntityRepository
             ->orderBy('project.name', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findAllVisibleForUser(User $user, bool $isAdmin): array
+    {
+        $qb = $this->createQueryBuilder('project')
+            ->where('project.isArchived = :archived')
+            ->setParameter('archived', false);
+
+        if (!$isAdmin) {
+            $qb->andWhere(':user MEMBER OF project.users')
+                ->setParameter('user', $user);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**
