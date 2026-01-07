@@ -3,36 +3,32 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-5">
-            <h1 class="h3 mb-3 font-weight-normal text-center">S'inscrire</h1>
-            <p class="text-center text-muted mb-4">Bienvenue sur TaskLinker</p>
+    <div class="auth-card">
+        <h1>S'inscrire</h1>
 
-            {{ form_start(registrationForm) }}
-            <div class="mb-3">
-                {{ form_row(registrationForm.firstName, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.lastName, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
-            </div>
+        {{ form_start(registrationForm) }}
+        {# On retire les div.mb-3 de Bootstrap autour, notre CSS gère l'espacement #}
 
-            <div class="d-grid gap-2 mt-4">
-                <button type="submit" class="btn btn-primary btn-lg">Continuer</button>
-            </div>
-            {{ form_end(registrationForm) }}
+        {{ form_label(registrationForm.firstName) }}
+        {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control'}}) }}
 
-            <div class="text-center mt-3">
-                <small>Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></small>
-            </div>
+        {{ form_label(registrationForm.lastName) }}
+        {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control'}}) }}
+
+        {{ form_label(registrationForm.email) }}
+        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+
+        {{ form_label(registrationForm.plainPassword.first) }}
+        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+
+        {{ form_label(registrationForm.plainPassword.second) }}
+        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+
+        <button type="submit" class="btn-auth-primary">Continuer</button>
+        {{ form_end(registrationForm) }}
+
+        <div class="auth-footer">
+            Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
         </div>
     </div>
 {% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Équipe - TaskLinker{% endblock %}
+
+{% block body %}
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <h1>Équipe</h1>
+        </div>
+    </header>
+
+    <div id="content">
+        {# On utilise l'ID qui active le CSS du "joli tableau" #}
+        <table id="team-container">
+            <thead>
+            <tr>
+                <th>Prénom, Nom, Email</th>
+                <th>Statut</th>
+                <th>Rôle</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        <div class="employee-infos">
+                            {# Initiale dans le rond vert #}
+                            <div class="employee-avatar">
+                                {{ user.firstName|first|upper }}{{ user.lastName|first|upper }}
+                            </div>
+                            <div class="employee-coords">
+                                <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                                <span style="color: #5C5C5C; font-size: 14px;">{{ user.email }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ user.status }}</td>
+                    <td>
+                        {% if 'ROLE_PROJECT_MANAGER' in user.roles %}
+                            Chef de projet
+                        {% else %}
+                            Collaborateur
+                        {% endif %}
+                    </td>
+                    <td>
+                        {# Bouton Éditer stylisé #}
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="button-edit-team button">
+                            Éditer
+                        </a>
+
+                        {# Lien supprimer (désactivé pour l'instant si pas de route) #}
+                        <a href="#" class="delete-team" style="margin-left: 20px;">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">Aucun membre dans l'équipe.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -12,10 +12,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ProjectController extends AbstractController
 {
     #[Route('/project/new', name: 'project_create')]
+    #[IsGranted('ROLE_PROJECT_MANAGER')]
     public function projectCreate(Request $request, EntityManagerInterface $em): Response
     {
         $project = new Project();
@@ -58,6 +60,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}/edit', name: 'project_edit')]
+    #[IsGranted('ROLE_PROJECT_MANAGER')]
     public function projectEdit(Project $project, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(ProjectType::class, $project);
@@ -79,6 +82,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}/archive', name: 'project_archive', methods: ['POST'])]
+    #[IsGranted('ROLE_PROJECT_MANAGER')]
     public function projectArchive(Project $project, Request $request, EntityManagerInterface $em): Response
     {
         $token = $request->request->get('_token');
