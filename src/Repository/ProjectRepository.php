@@ -44,6 +44,17 @@ class ProjectRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function save(Project $project): void
+    {
+        $this->getEntityManager()->persist($project);
+        $this->getEntityManager()->flush();
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
 //    /**
 //     * @return Project[] Returns an array of Project objects
 //     */

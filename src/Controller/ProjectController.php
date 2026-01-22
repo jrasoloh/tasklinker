@@ -6,7 +6,7 @@ use App\Entity\Project;
 use App\Entity\Task;
 use App\Form\ProjectType;
 use App\Form\TaskType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Manager\ProjectManager;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,17 +18,15 @@ final class ProjectController extends AbstractController
 {
     #[Route('/project/new', name: 'project_create')]
     #[IsGranted('ROLE_PROJECT_MANAGER')]
-    public function projectCreate(Request $request, EntityManagerInterface $em): Response
+    public function projectCreate(Request $request, ProjectManager $projectManager): Response
     {
         $project = new Project();
-        $project->setIsArchived(false);
 
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($project);
-            $em->flush();
+            $projectManager->createProject($project);
 
             $this->addFlash('success', 'Projet créé avec succès !');
 
@@ -41,19 +39,11 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}', name: 'project_show')]
-    public function show(Project $project): Response
+    public function show(Project $project, ProjectManager $projectManager): Response
     {
         $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
 
-        $tasksByStatus = [
-            'To Do' => [],
-            'Doing' => [],
-            'Done' => [],
-        ];
-
-        foreach ($project->getTasks() as $task) {
-            $tasksByStatus[$task->getStatus()][] = $task;
-        }
+        $tasksByStatus = $projectManager->getTasksByStatus($project);
 
         return $this->render('project/show.html.twig', [
             'project' => $project,
@@ -62,7 +52,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}/edit', name: 'project_edit')]
-    public function projectEdit(Project $project, Request $request, EntityManagerInterface $em): Response
+    public function projectEdit(Project $project, Request $request, ProjectManager $projectManager): Response
     {
         $this->denyAccessUnlessGranted('PROJECT_EDIT', $project);
 
@@ -71,7 +61,7 @@ final class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+            $projectManager->updateProject($project);
 
             $this->addFlash('success', 'Projet mis à jour avec succès !');
 
@@ -86,14 +76,11 @@ final class ProjectController extends AbstractController
 
     #[Route('/project/{id}/archive', name: 'project_archive', methods: ['POST'])]
     #[IsGranted('ROLE_PROJECT_MANAGER')]
-    public function projectArchive(Project $project, Request $request, EntityManagerInterface $em): Response
+    public function projectArchive(Project $project, Request $request, ProjectManager $projectManager): Response
     {
         $token = $request->request->get('_token');
         if ($this->isCsrfTokenValid('archive'.$project->getId(), $token)) {
-
-            $project->setIsArchived(true);
-            $em->flush();
-
+            $projectManager->archiveProject($project);
             $this->addFlash('success', 'Projet archivé avec succès.');
         }
 
@@ -101,7 +88,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}/task/new', name: 'task_create')]
-    public function taskCreate(Project $project, Request $request, EntityManagerInterface $em): Response
+    public function taskCreate(Project $project, Request $request, ProjectManager $projectManager): Response
     {
         $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
 
@@ -118,8 +105,7 @@ final class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($task);
-            $em->flush();
+            $projectManager->createTask($task);
 
             return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
         }
@@ -135,7 +121,7 @@ final class ProjectController extends AbstractController
         Project $project,
         #[MapEntity(id: 'task_id')] Task $task,
         Request $request,
-        EntityManagerInterface $em
+        ProjectManager $projectManager
     ): Response {
         $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
 
@@ -150,9 +136,9 @@ final class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+            $projectManager->updateTask($task);
 
-            return $this->redirectToRoute('project_show', ['id' => $project->getId()]); // [cite: 160]
+            return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
         }
 
         return $this->render('task/edit.html.twig', [
@@ -167,24 +153,19 @@ final class ProjectController extends AbstractController
         Project $project,
         #[MapEntity(id: 'task_id')] Task $task,
         Request $request,
-        EntityManagerInterface $em
+        ProjectManager $projectManager
     ): Response {
         $this->denyAccessUnlessGranted('PROJECT_VIEW', $project);
 
-        // On vérifie que la tâche appartient bien au projet
         if ($task->getProject() !== $project) {
             throw $this->createNotFoundException('Tâche non trouvée dans ce projet');
         }
 
-        // On vérifie la validité du jeton CSRF
-        // Le nom 'delete' . task.id doit être le même que dans le formulaire
         $token = $request->request->get('_token');
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $token)) {
-            $em->remove($task);
-            $em->flush();
+            $projectManager->deleteTask($task);
         }
 
-        // On redirige vers la page du projet
         return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
     }
 }
