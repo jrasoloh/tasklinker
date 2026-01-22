@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Project;
 use App\Entity\Task;
+use App\Entity\User;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 
@@ -85,5 +86,13 @@ class ProjectManager
     public function deleteTask(Task $task): void
     {
         $this->taskRepository->remove($task);
+    }
+
+    /**
+     * Find all projects visible for a user based on their role
+     */
+    public function findAllVisibleForUser(User $user, bool $isAdmin): array
+    {
+        return $this->projectRepository->findAllVisibleForUser($user, $isAdmin);
     }
 }

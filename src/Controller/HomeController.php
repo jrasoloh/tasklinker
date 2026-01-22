@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Project;
 use App\Entity\User;
-use App\Repository\ProjectRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Manager\ProjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,15 +13,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class HomeController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_home')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(ProjectManager $projectManager): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        /** @var ProjectRepository $repository */
-        $repository = $entityManager->getRepository(Project::class);
-
-        $projects = $repository->findAllVisibleForUser(
+        $projects = $projectManager->findAllVisibleForUser(
             $user,
             $this->isGranted('ROLE_PROJECT_MANAGER')
         );
