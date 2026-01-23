@@ -5,6 +5,6 @@ scheb_two_factor:
         - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
     totp:
         enabled: true
-        server_name: TaskLinker  # Le nom qui apparaitra sur le téléphone
+        server_name: TaskLinker
         issuer: TaskLinker
         template: security/2fa_login.html.twig

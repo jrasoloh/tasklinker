@@ -774,20 +774,17 @@ body.auth-page {
     font-weight: 400;
 }
 
-/* 1. On force la carte à passer AU-DESSUS de tout l'univers */
 .auth-card {
-    position: relative !important; /* Indispensable pour que z-index marche */
-    z-index: 9999 !important;      /* Valeur arbitrairement haute */
+    position: relative !important;
+    z-index: 9999 !important;
 }
 
-/* 2. Si c'est un reste de Bootstrap (modal-backdrop), on le cache */
 .modal-backdrop {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
 
-/* 3. Sécurité : Si un overlay traîne, on lui dit de laisser passer les clics */
 body::before, body::after {
-    pointer-events: none !important; /* La magie est ici : le clic traverse l'élément */
+    pointer-events: none !important;
 }

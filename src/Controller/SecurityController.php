@@ -38,16 +38,13 @@ class SecurityController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        // Si la 2FA est déjà active, on redirige vers l'accueil
         if ($securityManager->has2FAEnabled($user)) {
             return $this->redirectToRoute('app_home');
         }
 
-        // 1. Récupérer ou générer le secret temporaire depuis la session
         $session = $request->getSession();
         $tempSecret = $securityManager->getTempSecret($session);
 
-        // 2. Gestion du formulaire (L'utilisateur a entré le code)
         if ($request->isMethod('POST')) {
             $code = $request->request->get('_auth_code');
 
@@ -61,7 +58,6 @@ class SecurityController extends AbstractController
             }
         }
 
-        // 3. Génération visuelle du QR Code (avec le secret temporaire)
         $qrCodeContent = $securityManager->getQRCodeContentWithTempSecret($user, $tempSecret);
 
         $result = Builder::create()
