@@ -23,18 +23,39 @@
         {% set currentRoute = app.request.attributes.get('_route') %}
 
         <ul id="main-menu">
+            {# Lien Projets (Accessible à tous les connectés) #}
             <li class="{{ (currentRoute == 'app_home' or currentRoute starts with 'project_' or currentRoute starts with 'task_') ? 'active' : '' }}">
                 <a href="{{ path('app_home') }}">
                     <i class="fa-solid fa-list-check"></i> Projets
                 </a>
             </li>
-            <li class="{{ (currentRoute starts with 'team_') ? 'active' : '' }}">
-                <a href="{{ path('team_index') }}">
-                    <i class="fa-regular fa-user"></i> Équipe
+
+            {# Lien Équipe (Sécurisé : Admin seulement) #}
+            {% if is_granted('ROLE_PROJECT_MANAGER') %}
+                {# On vérifie si la route commence par 'app_user_' pour mettre la classe active #}
+                <li class="{{ (currentRoute starts with 'app_user_') ? 'active' : '' }}">
+                    <a href="{{ path('app_user_index') }}">
+                        <i class="fa-regular fa-user"></i> Équipe
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="mt-auto">
+                <a href="{{ path('app_logout') }}">
+                    <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
                 </a>
             </li>
         </ul>
     </nav>
+
+    {% if app.user %}
+        <div class="user-header-profile">
+            <div class="user-avatar">
+                {{ app.user.firstName|first|upper }}{{ app.user.lastName|first|upper }}
+            </div>
+        </div>
+    {% endif %}
+
     <main>
         {% block body %}{% endblock %}
     </main>

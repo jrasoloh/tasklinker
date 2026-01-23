@@ -1,0 +1,29 @@
+{% extends 'base-logout.html.twig' %}
+
+{% block title %}Bienvenue sur TaskLinker{% endblock %}
+
+{% block body %}
+    <div class="auth-card">
+        <h1>Bienvenue sur TaskLinker</h1>
+
+        <p style="margin-bottom: 30px; color: rgba(255,255,255,0.9); font-size: 15px;">
+            Commencez dès maintenant - gratuitement
+        </p>
+
+        <p style="font-size: 14px; margin-bottom: 15px; color: rgba(255,255,255,0.8);">
+            Vous avez déjà un compte ?
+        </p>
+
+        <a href="{{ path('app_login') }}" class="btn-auth-primary" style="display:block; text-decoration:none; line-height: 20px;">
+            Se connecter
+        </a>
+
+        <div class="auth-divider">
+            <span>ou</span>
+        </div>
+
+        <a href="{{ path('app_register') }}" class="btn-auth-secondary" style="display:block; text-decoration:none; line-height: 20px;">
+            S'inscrire
+        </a>
+    </div>
+{% endblock %}

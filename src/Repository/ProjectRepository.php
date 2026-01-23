@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,44 @@ class ProjectRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Project::class);
+    }
+
+    public function findNonArchivedProjectsByUser(int $userId): array
+    {
+        return $this->createQueryBuilder('project')
+            ->join('project.users', 'user')
+            ->andWhere('project.isArchived = :isArchived')
+            ->andWhere('user.id = :userId')
+            ->setParameter('isArchived', false)
+            ->setParameter('userId', $userId)
+            ->orderBy('project.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllVisibleForUser(User $user, bool $isAdmin): array
+    {
+        $qb = $this->createQueryBuilder('project')
+            ->where('project.isArchived = :archived')
+            ->setParameter('archived', false);
+
+        if (!$isAdmin) {
+            $qb->andWhere(':user MEMBER OF project.users')
+                ->setParameter('user', $user);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function save(Project $project): void
+    {
+        $this->getEntityManager()->persist($project);
+        $this->getEntityManager()->flush();
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
     }
 
 //    /**

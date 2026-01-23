@@ -2,17 +2,31 @@
 
 namespace App\Controller;
 
-use App\Repository\ProjectRepository;
+use App\Entity\User;
+use App\Manager\ProjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(ProjectRepository $projectRepository): Response
+    #[Route('/dashboard', name: 'app_home')]
+    public function index(ProjectManager $projectManager): Response
     {
-        $projects = $projectRepository->findBy(['isArchived' => false]);
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$user->isTotpAuthenticationEnabled()) {
+            $this->addFlash('warning', 'Vous devez configurer la sécurité avant de continuer.');
+            return $this->redirectToRoute('app_2fa_enable');
+        }
+
+        $projects = $projectManager->findAllVisibleForUser(
+            $user,
+            $this->isGranted('ROLE_PROJECT_MANAGER')
+        );
 
         return $this->render('home/index.html.twig', [
             'projects' => $projects,

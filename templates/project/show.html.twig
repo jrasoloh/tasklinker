@@ -16,8 +16,11 @@
                         </div>
                     {% endfor %}
                 </div>
-                {# On mettra le vrai lien d'édition plus tard #}
-                <a class="button" href="{{ path('project_edit', {id: project.id}) }}">Modifier</a>
+
+                {% if is_granted('ROLE_PROJECT_MANAGER') %}
+                    <a class="button" href="{{ path('project_edit', {id: project.id}) }}">Modifier</a>
+                {% endif %}
+
             </div>
         </div>
     </header>
