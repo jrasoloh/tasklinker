@@ -18,6 +18,11 @@ final class HomeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        if (!$user->isTotpAuthenticationEnabled()) {
+            $this->addFlash('warning', 'Vous devez configurer la sécurité avant de continuer.');
+            return $this->redirectToRoute('app_2fa_enable');
+        }
+
         $projects = $projectManager->findAllVisibleForUser(
             $user,
             $this->isGranted('ROLE_PROJECT_MANAGER')

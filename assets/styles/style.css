@@ -717,3 +717,77 @@ body.auth-page {
         font-family: 'Inter', sans-serif;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+
+/* =========================================
+   STYLE SPECIFIQUE 2FA
+   ========================================= */
+
+.qr-code-wrapper {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 20px 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.qr-code-wrapper img {
+    display: block;
+    width: 200px;
+    height: 200px;
+}
+
+.auth-steps {
+    text-align: left;
+    margin-bottom: 30px;
+    color: rgba(255,255,255,0.9);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.auth-steps strong {
+    color: white;
+}
+
+.auth-steps ol {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.auth-steps li {
+    margin-bottom: 8px;
+}
+
+.input-2fa {
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 12px;
+    font-weight: 700;
+    color: #1C5B50;
+    font-family: 'Manrope', monospace;
+}
+
+.input-2fa::placeholder {
+    letter-spacing: normal;
+    font-size: 14px;
+    color: #ccc;
+    font-weight: 400;
+}
+
+/* 1. On force la carte à passer AU-DESSUS de tout l'univers */
+.auth-card {
+    position: relative !important; /* Indispensable pour que z-index marche */
+    z-index: 9999 !important;      /* Valeur arbitrairement haute */
+}
+
+/* 2. Si c'est un reste de Bootstrap (modal-backdrop), on le cache */
+.modal-backdrop {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* 3. Sécurité : Si un overlay traîne, on lui dit de laisser passer les clics */
+body::before, body::after {
+    pointer-events: none !important; /* La magie est ici : le clic traverse l'élément */
+}

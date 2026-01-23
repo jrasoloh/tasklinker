@@ -1,0 +1,61 @@
+{% extends 'base-logout.html.twig' %}
+
+{% block title %}Configuration 2FA{% endblock %}
+
+{% block body %}
+    <div class="auth-card" style="max-width: 600px;">
+        <h1>Sécurisez votre compte</h1>
+
+        {# Affichage des erreurs (code invalide) #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" style="background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <p style="margin-bottom: 20px;">
+            Pour valider l'activation, scannez le code et entrez le code à 6 chiffres généré.
+        </p>
+
+        <div class="d-flex" style="display: flex; gap: 30px; align-items: flex-start; text-align: left;">
+            {# Colonne QR #}
+            <div class="qr-code-wrapper" style="margin: 0; flex-shrink: 0;">
+                <img src="{{ qrCodeImage }}" alt="QR Code 2FA" style="width: 180px; height: 180px;">
+            </div>
+
+            {# Colonne Formulaire #}
+            <div style="flex-grow: 1;">
+                <div class="auth-steps">
+                    <ol style="padding-left: 20px; margin-top: 0;">
+                        <li>Ouvrez <strong>Google Authenticator</strong>.</li>
+                        <li>Scannez le QR Code.</li>
+                        <li>Entrez le code obtenu ci-dessous :</li>
+                    </ol>
+                </div>
+
+                {# 👇 LE FORMULAIRE DE VALIDATION #}
+                <form method="post">
+                    <div class="mb-3">
+                        <input
+                            type="text"
+                            name="_auth_code"
+                            class="form-control input-2fa"
+                            placeholder="000 000"
+                            maxlength="7"
+                            required
+                            style="margin-bottom: 15px;"
+                        >
+                    </div>
+
+                    <button type="submit" class="btn-auth-primary">
+                        Activer la protection
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="auth-footer" style="margin-top: 20px;">
+            <a href="{{ path('app_logout') }}">Annuler et se déconnecter</a>
+        </div>
+    </div>
+{% endblock %}

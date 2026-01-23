@@ -1,0 +1,42 @@
+{% extends 'base-logout.html.twig' %}
+
+{% block title %}Vérification de sécurité{% endblock %}
+
+{% block body %}
+    <div class="auth-card">
+        <h1>Code de sécurité</h1>
+        <p>Ouvrez votre application d'authentification pour obtenir votre code.</p>
+
+        <form action="{{ checkPathUrl ? checkPathUrl : path(checkPathRoute) }}" method="post">
+
+            {% if authenticationError %}
+                <div class="alert alert-danger" style="color: #ffcccc; margin-bottom: 15px; background: rgba(255, 0, 0, 0.1); padding: 10px; border-radius: 4px;">
+                    {{ authenticationError|trans(authenticationErrorData, 'SchebTwoFactorBundle') }}
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <input
+                    type="text"
+                    name="{{ authCodeParameterName }}"
+                    class="form-control input-2fa"
+                    autocomplete="one-time-code"
+                    autofocus
+                    placeholder="000 000"
+                    maxlength="7"
+                >
+            </div>
+
+            <input type="hidden" name="{{ trustedParameterName }}" value="1" />
+
+            <button class="btn-auth-primary" type="submit">
+                Vérifier
+            </button>
+
+            <div class="auth-footer">
+                Problème d'accès ?
+                <a href="{{ path('app_logout') }}">Annuler et se déconnecter</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
